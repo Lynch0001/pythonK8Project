@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consumer-deployment
+spec:
+  selector:
+    matchLabels:
+      app: consumer-deployment
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: consumer-deployment
+    spec:
+      containers:
+        - name: refresh-consumer-container
+          image: lynch0001/consumerimage
+          imagePullPolicy: IfNotPresent
+          command:
+            - '["Python3"]'
+          args:
+            - '["producer.py"]'
+          ports:
+            - name: broker
+              containerPort: 31000
+              protocol: TCP
+            - name: redirect-return
+              containerPort: 8000
+              protocol: TCP
+          env:
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: consumer-secret
+                  key: consumer-client-secret
+            - name: BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: consumer-configmap
+                  key: consumer-bootstrap-servers
+            - name: TOPIC
+              valueFrom:
+                configMapKeyRef:
+                  name: consumer-configmap
+                  key: consumer-topic
+            - name: GROUP_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: consumer-configmap
+                  key: consumer-group-id
+            - name: CLIENT_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: consumer-configmap
+                  key: consumer-client-id
