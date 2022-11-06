@@ -16,14 +16,12 @@ def configure():
 if __name__ == '__main__':
     groupId, topic, clientId, clientSecret, bootstrapServers = configure()
     try:
-        print(groupId)
-        print(topic)
-        print(clientId)
-        print(clientSecret)
-        print(bootstrapServers)
-        while True:
-            print(1)
+        logging.debug(groupId)
+        logging.debug(topic)
+        logging.debug(clientId)
+        logging.debug(clientSecret)
+        logging.debug(bootstrapServers)
     except KeyError:
-        print("Environment variable not found")
+        logging.debug("Environment variable not found")
         sys.exit(1)
 
