@@ -1,5 +1,8 @@
 import os
+import sys
+import logging
 
+logging.basicConfig(level=logging.DEBUG)
 
 def configure():
 
@@ -12,9 +15,15 @@ def configure():
 
 if __name__ == '__main__':
     groupId, topic, clientId, clientSecret, bootstrapServers = configure()
-    print(groupId)
-    print(topic)
-    print(clientId)
-    print(clientSecret)
-    print(bootstrapServers)
+    try:
+        print(groupId)
+        print(topic)
+        print(clientId)
+        print(clientSecret)
+        print(bootstrapServers)
+        while True:
+            print(1)
+    except KeyError:
+        print("Environment variable not found")
+        sys.exit(1)
 
